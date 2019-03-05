@@ -75,6 +75,12 @@
     "flowtype/valid-syntax": 1
   },
   "settings": {
+    "react": {
+      "createClass": "createReactClass",
+      "pragma": "React",
+      "version": "detect",
+      "flowVersion": "0.93"
+    },
     "flowtype": {
       "onlyFilesWithFlowAnnotation": true
     }
