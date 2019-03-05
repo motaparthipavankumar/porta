@@ -8,7 +8,7 @@
   "scripts": {
     "clear": "rm -rf node_modules/",
     "flow:install": "flow-typed install",
-    "lint": "flow && eslint .eslintrc app/javascript spec/javascripts",
+    "lint": "flow && eslint app/javascript spec/javascripts",
     "test": "karma start --single-run",
     "jest": "jest",
     "jest:watch": "npm run-script jest -- --watch"
