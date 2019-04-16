@@ -31,3 +31,6 @@ Sidekiq.configure_client do |config|
     chain.add ThreeScale::SidekiqLoggingMiddleware
   end
 end
+
+require 'sidekiq/throttled'
+Sidekiq::Throttled.setup!

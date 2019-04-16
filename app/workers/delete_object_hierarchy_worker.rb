@@ -2,6 +2,12 @@
 
 # TODO: Rails 5 --> class DeleteObjectHierarchyWorker < ApplicationJob
 class DeleteObjectHierarchyWorker < ActiveJob::Base
+  include Sidekiq::Throttled::Worker
+
+  sidekiq_throttle({
+    concurrency: { limit: 10 },
+    threshold: { limit: 1000, period: 1.hour }
+  })
 
   # TODO: Rails 5 --> discard_on ActiveJob::DeserializationError
   # No need of ActiveRecord::RecordNotFound because that can only happen in the callbacks and those callbacks don't use this rescue_from but its own rescue
