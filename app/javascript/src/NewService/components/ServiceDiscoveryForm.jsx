@@ -4,9 +4,9 @@ const actionPath = '/p/admin/service_discovery/services'
 // TODO: Get authenticityToken from rails
 const authenticityToken = ''
 
-const ServiceDiscoveryForm = () => {
+const ServiceDiscoveryForm = ({isVisible}) => {
   return (
-    <form className="formtastic is-hidden" id="service_discovery" action={actionPath} acceptCharset="UTF-8" method="post">
+    <form className={`formtastic ${isVisible ? '' : 'is-hidden'}`} id="service_discovery" action={actionPath} acceptCharset="UTF-8" method="post">
       <input name="utf8" type="hidden" value="✓"/>
       <input type="hidden" name="authenticity_token" value={authenticityToken}/> {/* TODO: Get the authenticity_token */}
       <input value="discover" type="hidden" name="service[source]" id="service_source"/>
