@@ -1,7 +1,7 @@
 import React from 'react'
 
 const ServiceSourceForm = (props) => {
-  const {isServiceDiscoveryUsable, serviceDiscoveryAuthenticateUrl, providerAdminServiceDiscoveryServicesPath, onHandleFormsVisibility} = props
+  const {isServiceDiscoveryUsable, serviceDiscoveryAuthenticateUrl, providerAdminServiceDiscoveryServicesPath, onHandleFormsVisibility, onStartNamespacesFetch} = props
   return (<form className="formtastic" id="new_service_source">
     <fieldset className="inputs">
       <ol>
@@ -12,7 +12,7 @@ const ServiceSourceForm = (props) => {
         </li>
         <li className="radio">
           <label htmlFor="source_discover">
-            <input type="radio" name="source" id="source_discover" value="discover" disabled={!isServiceDiscoveryUsable} onChange={onHandleFormsVisibility}/> Import from OpenShift
+            <input type="radio" name="source" id="source_discover" value="discover" disabled={!isServiceDiscoveryUsable} onChange={onHandleFormsVisibility} onClick={onStartNamespacesFetch}/> Import from OpenShift
             {
               !isServiceDiscoveryUsable && <a href={serviceDiscoveryAuthenticateUrl}> (Authenticate to enable this option)</a>
             }
