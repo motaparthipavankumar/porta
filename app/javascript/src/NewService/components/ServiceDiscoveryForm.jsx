@@ -6,7 +6,7 @@ const renderSelectOptions = options => options.map(
   option => <option key={option} value={option}>{option}</option>
 )
 
-const ServiceDiscoveryForm = ({isVisible, providerAdminServiceDiscoveryServicesPath, onSettingSelectedNamespace, namespaces, services}) => {
+const ServiceDiscoveryForm = ({isVisible, providerAdminServiceDiscoveryServicesPath, namespaces, services, selectedNamespace, handleChangeNamespaces}) => {
   return (
     <form className={`formtastic ${isVisible ? '' : 'is-hidden'}`} id="service_discovery" action={providerAdminServiceDiscoveryServicesPath} acceptCharset="UTF-8" method="post">
       <input name="utf8" type="hidden" value="✓"/>
@@ -19,7 +19,7 @@ const ServiceDiscoveryForm = ({isVisible, providerAdminServiceDiscoveryServicesP
         <ol>
           <li>
             <label htmlFor="namespace">Namespace</label>
-            <select required="required" name="service[namespace]" id="service_namespace" data-selected-value="" onChange={onSettingSelectedNamespace}>
+            <select required="required" name="service[namespace]" id="service_namespace" data-selected-value={selectedNamespace} onChange={handleChangeNamespaces}>
               { namespaces.length > 0 && renderSelectOptions(namespaces) }
             </select>
           </li>

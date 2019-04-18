@@ -13,9 +13,8 @@ const NewServiceWrapper = (props) => {
   const [isServNewVisible, setServNewVisible] = useState(true)
   const [namespaces, setNamespaces] = useState([])
   const [services, setServices] = useState([])
-  const [selectedNamespace, setSelectedNamespace] = useState('')
-  const [namespacesFetched, setNamespacesFetched] = useState(false)
-  const [servicesFetched, setServicesFetched] = useState(false)
+  const [selectedNamespace, setSelectedNamespace] = useState(undefined)
+  const [servicesRequested, setServicesRequested] = useState(false)
 
   const fetchData = async (url) => {
     return fetchPolyfill(url)
@@ -36,33 +35,35 @@ const NewServiceWrapper = (props) => {
     })
   }
 
-  const fetchServices = async () => {
-    const SERVICES_URL = `${BASE_URL}namespaces/${selectedNamespace}/services.json`
-    return fetchData(SERVICES_URL).then(data => {
+  const fetchServices = async (url) => {
+    return fetchData(url).then(data => {
       return data.services.reduce(
         (acc, current) => acc.concat(current.metadata.name),
         [])
     })
   }
 
-  const settingSelectedNamespace = (event) => {
+  const settingSelectedNamespace = (namespace) => {
+    setSelectedNamespace(namespace)
+  }
+
+  const onChangeNamespaces = (event) => {
     setSelectedNamespace(event.target.value)
-    startServicesFetch()
+    setServicesRequested(true)
   }
 
   const startNamespacesFetch = async () => {
-    setNamespacesFetched(false)
-    setServicesFetched(false)
     const namespacesData = await fetchNamespaces()
     setNamespaces(namespacesData)
-    setSelectedNamespace(namespacesData[0])
-    setNamespacesFetched(true)
+    setServicesRequested(true)
+    settingSelectedNamespace(namespacesData[0])
   }
 
-  const startServicesFetch = async () => {
-    const servicesData = await fetchServices()
-    setServicesFetched(true)
+  const startServicesFetch = async (url) => {
+    setServices([])
+    const servicesData = await fetchServices(url)
     setServices(servicesData)
+    setServicesRequested(false)
   }
 
   const handleFormsVisibility = (event) => {
@@ -76,10 +77,11 @@ const NewServiceWrapper = (props) => {
   }
 
   useEffect(() => {
-    if (namespacesFetched && !servicesFetched && selectedNamespace !== '') {
-      startServicesFetch()
+    if (servicesRequested && selectedNamespace) {
+      const SERVICES_URL = `${BASE_URL}namespaces/${selectedNamespace}/services.json`
+      startServicesFetch(SERVICES_URL)
     }
-  })
+  }, [servicesRequested, selectedNamespace])
 
   const sourceFormProps = {
     isServiceDiscoveryUsable: props.isServiceDiscoveryUsable,
@@ -93,7 +95,9 @@ const NewServiceWrapper = (props) => {
     providerAdminServiceDiscoveryServicesPath: props.providerAdminServiceDiscoveryServicesPath,
     onSettingSelectedNamespace: settingSelectedNamespace,
     namespaces: namespaces,
-    services: services
+    services: services,
+    selectedNamespace: selectedNamespace,
+    handleChangeNamespaces: onChangeNamespaces
   }
 
   return (
