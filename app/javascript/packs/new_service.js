@@ -9,7 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
     isServiceDiscoveryAccesible: newServiceData.isServiceDiscoveryAccesible,
     isServiceDiscoveryUsable: newServiceData.isServiceDiscoveryUsable,
     serviceDiscoveryAuthenticateUrl: newServiceData.serviceDiscoveryAuthenticateUrl,
-    providerAdminServiceDiscoveryServicesPath: newServiceData.providerAdminServiceDiscoveryServicesPath
+    providerAdminServiceDiscoveryServicesPath: newServiceData.providerAdminServiceDiscoveryServicesPath,
+    adminServicesPath: newServiceData.adminServicesPath
   }
   render(<NewServiceWrapper {...props}/>, newServiceWrapper)
 })

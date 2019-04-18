@@ -1,12 +1,10 @@
 import React from 'react'
-// TODO: Get actionPath from rails
-const actionPath = '/apiconfig/services'
 // TODO: Get authenticityToken from rails
 const authenticityToken = ''
 
-const ServiceNewForm = ({isVisible}) => {
+const ServiceNewForm = ({isVisible, adminServicesPath}) => {
   return (
-    <form className={`formtastic service ${isVisible ? '' : 'is-hidden'}`} id="new_service" action={actionPath} acceptCharset="UTF-8" method="post">
+    <form className={`formtastic service ${isVisible ? '' : 'is-hidden'}`} id="new_service" action={adminServicesPath} acceptCharset="UTF-8" method="post">
       <input name="utf8" type="hidden" defaultValue="✓"/>
       <input type="hidden" name="authenticity_token" defaultValue={authenticityToken}/> {/* TODO: Get the authenticity_token */}
       <fieldset className="inputs" name="Service">

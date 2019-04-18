@@ -5,43 +5,27 @@ import ServiceSourceForm from 'NewService/components/ServiceSourceForm'
 import ServiceDiscoveryForm from 'NewService/components/ServiceDiscoveryForm'
 import ServiceNewForm from 'NewService/components/ServiceNewForm'
 
-const NewServiceWrapper = (props) => {
-  const BASE_URL = '/p/admin/service_discovery/'
-  const NAMESPACES_URL = `${BASE_URL}projects.json`
+const BASE_URL = '/p/admin/service_discovery/'
+const NAMESPACES_URL = `${BASE_URL}projects.json`
 
+const fetchData = async (url) => {
+  return fetchPolyfill(url)
+    .then(response => {
+      if (!response.ok) {
+        throw Error(response.statusText)
+      }
+      return response.json()
+    })
+    .catch(error => console.error(error))
+}
+
+const NewServiceWrapper = (props) => {
   const [isServDescVisible, setServDescVisible] = useState(false)
   const [isServNewVisible, setServNewVisible] = useState(true)
   const [namespaces, setNamespaces] = useState([])
   const [services, setServices] = useState([])
   const [selectedNamespace, setSelectedNamespace] = useState(undefined)
   const [servicesRequested, setServicesRequested] = useState(false)
-
-  const fetchData = async (url) => {
-    return fetchPolyfill(url)
-      .then(response => {
-        if (!response.ok) {
-          throw Error(response.statusText)
-        }
-        return response.json()
-      })
-      .catch(error => console.error(error))
-  }
-
-  const fetchNamespaces = async () => {
-    return fetchData(NAMESPACES_URL).then(data => {
-      return data.projects.reduce(
-        (acc, current) => acc.concat(current.metadata.name),
-        [])
-    })
-  }
-
-  const fetchServices = async (url) => {
-    return fetchData(url).then(data => {
-      return data.services.reduce(
-        (acc, current) => acc.concat(current.metadata.name),
-        [])
-    })
-  }
 
   const settingSelectedNamespace = (namespace) => {
     setSelectedNamespace(namespace)
@@ -53,15 +37,15 @@ const NewServiceWrapper = (props) => {
   }
 
   const startNamespacesFetch = async () => {
-    const namespacesData = await fetchNamespaces()
+    const namespacesData = await fetchData(NAMESPACES_URL).then(data => data.projects.reduce((acc, current) => acc.concat(current.metadata.name), []))
     setNamespaces(namespacesData)
     setServicesRequested(true)
     settingSelectedNamespace(namespacesData[0])
   }
 
-  const startServicesFetch = async (url) => {
+  const startServicesFetch = async (servicesUrl) => {
     setServices([])
-    const servicesData = await fetchServices(url)
+    const servicesData = await fetchData(servicesUrl).then(data => data.services.reduce((acc, current) => acc.concat(current.metadata.name), []))
     setServices(servicesData)
     setServicesRequested(false)
   }
@@ -100,12 +84,17 @@ const NewServiceWrapper = (props) => {
     handleChangeNamespaces: onChangeNamespaces
   }
 
+  const serviceNewProps = {
+    isVisible: isServNewVisible,
+    adminServicesPath: props.adminServicesPath
+  }
+
   return (
     <React.Fragment>
       <h1>NEW API</h1>
       <ServiceSourceForm {...sourceFormProps}/>
       <ServiceDiscoveryForm {...serviceDiscoveryFormProps}/>
-      <ServiceNewForm isVisible={isServNewVisible}/>
+      <ServiceNewForm {...serviceNewProps}/>
     </React.Fragment>
   )
 }

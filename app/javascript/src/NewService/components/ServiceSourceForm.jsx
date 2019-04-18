@@ -1,7 +1,7 @@
 import React from 'react'
 
 const ServiceSourceForm = (props) => {
-  const {isServiceDiscoveryUsable, serviceDiscoveryAuthenticateUrl, providerAdminServiceDiscoveryServicesPath, onHandleFormsVisibility, onStartNamespacesFetch} = props
+  const {isServiceDiscoveryUsable, serviceDiscoveryAuthenticateUrl, onHandleFormsVisibility, onStartNamespacesFetch} = props
   return (<form className="formtastic" id="new_service_source">
     <fieldset className="inputs">
       <ol>
