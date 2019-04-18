@@ -18,7 +18,7 @@ const ServiceNewForm = ({isVisible}) => {
             <label htmlFor="service_name">Name
               <abbr title="required">*</abbr>
             </label>
-            <input maxLength="255" autoFocus="autofocus" id="service_name" type="text" name="service[name]" />
+            <input maxLength="255" id="service_name" type="text" name="service[name]" />
           </li>
           <li id="service_system_name_input" className="string required">
             <label htmlFor="service_system_name">System name
@@ -34,7 +34,7 @@ const ServiceNewForm = ({isVisible}) => {
           </li>
         </ol>
       </fieldset>
-      <input type="submit" name="commit" defaultValue="Create Service" className="important-button create"/>
+      <input type="submit" name="commit" value="Add API" className="important-button create"/>
     </form>)
 }
 
