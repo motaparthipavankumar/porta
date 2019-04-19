@@ -4,6 +4,9 @@ const authenticityToken = ''
 
 const ServiceNewForm = ({isVisible, adminServicesPath}) => {
   return (
+    // Eslint is complaining about similar blocks (forms)
+    // TODO: Create a reusable react form component
+    // eslint-disable-next-line
     <form className={`formtastic service ${isVisible ? '' : 'is-hidden'}`} id="new_service" action={adminServicesPath} acceptCharset="UTF-8" method="post">
       <input name="utf8" type="hidden" defaultValue="✓"/>
       <input type="hidden" name="authenticity_token" defaultValue={authenticityToken}/> {/* TODO: Get the authenticity_token */}

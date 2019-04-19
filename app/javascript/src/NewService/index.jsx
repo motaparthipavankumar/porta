@@ -9,16 +9,21 @@ const BASE_URL = '/p/admin/service_discovery/'
 const NAMESPACES_URL = `${BASE_URL}projects.json`
 
 const fetchData = async (url) => {
-  return fetchPolyfill(url)
-    .then(response => {
-      if (!response.ok) {
-        throw Error(response.statusText)
-      }
-      return response.json()
-    })
+  const dataItem = url === NAMESPACES_URL
+    ? 'projects'
+    : 'services'
+
+  return fetchPolyfill(url).then(response => {
+    if (!response.ok) {
+      throw Error(response.statusText)
+    }
+    return response.json()
+  })
+    .then(data => data[dataItem].reduce((acc, current) => acc.concat(current.metadata.name), []))
     .catch(error => console.error(error))
 }
 
+// eslint-disable-next-line max-lines-per-function
 const NewServiceWrapper = (props) => {
   const [isServDescVisible, setServDescVisible] = useState(false)
   const [isServNewVisible, setServNewVisible] = useState(true)
@@ -37,7 +42,7 @@ const NewServiceWrapper = (props) => {
   }
 
   const startNamespacesFetch = async () => {
-    const namespacesData = await fetchData(NAMESPACES_URL).then(data => data.projects.reduce((acc, current) => acc.concat(current.metadata.name), []))
+    const namespacesData = await fetchData(NAMESPACES_URL)
     setNamespaces(namespacesData)
     setServicesRequested(true)
     settingSelectedNamespace(namespacesData[0])
@@ -45,7 +50,7 @@ const NewServiceWrapper = (props) => {
 
   const startServicesFetch = async (servicesUrl) => {
     setServices([])
-    const servicesData = await fetchData(servicesUrl).then(data => data.services.reduce((acc, current) => acc.concat(current.metadata.name), []))
+    const servicesData = await fetchData(servicesUrl)
     setServices(servicesData)
     setServicesRequested(false)
   }
@@ -67,34 +72,34 @@ const NewServiceWrapper = (props) => {
     }
   }, [servicesRequested, selectedNamespace])
 
-  const sourceFormProps = {
-    isServiceDiscoveryUsable: props.isServiceDiscoveryUsable,
-    serviceDiscoveryAuthenticateUrl: props.serviceDiscoveryAuthenticateUrl,
-    onHandleFormsVisibility: handleFormsVisibility,
-    onStartNamespacesFetch: startNamespacesFetch
-  }
-
-  const serviceDiscoveryFormProps = {
-    isVisible: isServDescVisible,
-    providerAdminServiceDiscoveryServicesPath: props.providerAdminServiceDiscoveryServicesPath,
-    onSettingSelectedNamespace: settingSelectedNamespace,
-    namespaces: namespaces,
-    services: services,
-    selectedNamespace: selectedNamespace,
-    handleChangeNamespaces: onChangeNamespaces
-  }
-
-  const serviceNewProps = {
-    isVisible: isServNewVisible,
-    adminServicesPath: props.adminServicesPath
+  const formsProps = {
+    source: {
+      isServiceDiscoveryUsable: props.isServiceDiscoveryUsable,
+      serviceDiscoveryAuthenticateUrl: props.serviceDiscoveryAuthenticateUrl,
+      onHandleFormsVisibility: handleFormsVisibility,
+      onStartNamespacesFetch: startNamespacesFetch
+    },
+    serviceDiscovery: {
+      isVisible: isServDescVisible,
+      providerAdminServiceDiscoveryServicesPath: props.providerAdminServiceDiscoveryServicesPath,
+      onSettingSelectedNamespace: settingSelectedNamespace,
+      namespaces: namespaces,
+      services: services,
+      selectedNamespace: selectedNamespace,
+      handleChangeNamespaces: onChangeNamespaces
+    },
+    serviceNew: {
+      isVisible: isServNewVisible,
+      adminServicesPath: props.adminServicesPath
+    }
   }
 
   return (
     <React.Fragment>
       <h1>NEW API</h1>
-      <ServiceSourceForm {...sourceFormProps}/>
-      <ServiceDiscoveryForm {...serviceDiscoveryFormProps}/>
-      <ServiceNewForm {...serviceNewProps}/>
+      <ServiceSourceForm {...formsProps.source}/>
+      <ServiceDiscoveryForm {...formsProps.serviceDiscovery}/>
+      <ServiceNewForm {...formsProps.serviceNew}/>
     </React.Fragment>
   )
 }

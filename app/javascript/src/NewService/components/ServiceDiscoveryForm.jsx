@@ -9,6 +9,9 @@ const renderSelectOptions = options => options.map(
 
 const ServiceDiscoveryForm = ({isVisible, providerAdminServiceDiscoveryServicesPath, namespaces, services, selectedNamespace, handleChangeNamespaces}) => {
   return (
+  // Eslint is complaining about similar blocks (forms)
+  // TODO: Create a reusable react form component
+  // eslint-disable-next-line
     <form className={`formtastic ${isVisible ? '' : 'is-hidden'}`} id="service_discovery" action={providerAdminServiceDiscoveryServicesPath} acceptCharset="UTF-8" method="post">
       <input name="utf8" type="hidden" value="✓"/>
       <input type="hidden" name="authenticity_token" value={authenticityToken}/> {/* TODO: Get the authenticity_token */}
