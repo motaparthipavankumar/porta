@@ -1,3 +1,5 @@
+// @flow
+
 import React, {useState, useEffect} from 'react'
 import {fetch as fetchPolyfill} from 'whatwg-fetch'
 
@@ -7,6 +9,14 @@ import ServiceNewForm from 'NewService/components/ServiceNewForm'
 
 const BASE_URL = '/p/admin/service_discovery/'
 const NAMESPACES_URL = `${BASE_URL}projects.json`
+
+type Props = {
+  isServiceDiscoveryAccesible: boolean,
+  isServiceDiscoveryUsable: boolean,
+  serviceDiscoveryAuthenticateUrl: string,
+  providerAdminServiceDiscoveryServicesPath: string,
+  adminServicesPath: string
+}
 
 const fetchData = async (url) => {
   const dataItem = url === NAMESPACES_URL
@@ -24,7 +34,7 @@ const fetchData = async (url) => {
 }
 
 // eslint-disable-next-line max-lines-per-function
-const NewServiceWrapper = (props) => {
+const NewServiceWrapper = (props: Props) => {
   const [isServDescVisible, setServDescVisible] = useState(false)
   const [isServNewVisible, setServNewVisible] = useState(true)
   const [namespaces, setNamespaces] = useState([])

@@ -9,7 +9,7 @@ declare var module: {
 
 // TODO: remove these module declarations when not failing
 declare module 'whatwg-fetch' {
-
+  declare module.exports: any
 }
 
 declare module 'core-js/fn/symbol' {
