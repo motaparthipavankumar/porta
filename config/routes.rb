@@ -13,6 +13,9 @@ end
 
 System::Application.routes.draw do
 
+  require 'sidekiq/throttled/web'
+  Sidekiq::Throttled::Web.enhance_queues_tab!
+
   constraints MasterDomainConstraint do
     prometheus = Rack::Builder.app do
       use Rack::Auth::Basic, 'Prometheus' do |username, password|
