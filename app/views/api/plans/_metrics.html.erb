@@ -49,7 +49,7 @@
           </td>
         </tr>
       <% else -%>
-        <%= render partial: 'api/metrics/top_level', as: :metric, collection: @service.top_level_metrics %>
+        <%= render partial: 'api/metrics/top_level', as: :metric, collection: @service.top_level_metrics.where(system_name: 'hits' ) %>
       <% end -%>
     </tbody>
   </table>
