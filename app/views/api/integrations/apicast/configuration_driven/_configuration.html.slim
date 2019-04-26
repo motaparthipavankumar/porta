@@ -24,11 +24,19 @@
       i.fa.fa-puzzle-piece
       - if current_account.provider_can_use? :api_as_product
         h2 Backends
-        ul
-          li
-            = link_to '#' do
-              => @service.name
-              | Backend API
+        table
+          thead
+            tr
+              th Name
+              th Path
+          tbody
+            tr
+              td
+                = link_to '#' do
+                  => @service.name
+                  | Backend API
+              td
+                input value = "/path"
 
       - else
         = f.inputs "API" do
@@ -51,8 +59,9 @@
                                 placeholder: "https://api.#{parameterized_org_name_of_the_current_account}.com" },
                   hint: apicast_endpoint_input_hint(@service, environment: 'production')
         = help_bubble( 'proxy_endpoint_bubble', t('api.integrations.proxy.proxy_endpoint_help_html'))
-        div.help-button-constrainer
-          = render 'api/integrations/apicast/shared/mapping_rules', f: f
+        - unless current_account.provider_can_use? :api_as_product
+          div.help-button-constrainer
+            = render 'api/integrations/apicast/shared/mapping_rules', f: f
         div.help-button-constrainer
           = render 'api/integrations/apicast/shared/authentication_settings', f: f, oauth_hint: 'apicast_oauth'
         - if current_account.provider_can_use?(:policies)
