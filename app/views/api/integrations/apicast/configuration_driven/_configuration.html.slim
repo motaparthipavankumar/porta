@@ -26,8 +26,10 @@
         h2 Backends
         ul
           li
-            => @service.name
-            | Backend API
+            = link_to '#' do
+              => @service.name
+              | Backend API
+
       - else
         = f.inputs "API" do
           = f.input :api_backend, input_html: { data: { default: @proxy.default_api_backend }, autofocus: (@proxy.api_backend == @proxy.default_api_backend) }, hint: is_https?(@proxy.api_backend) ? t('formtastic.hints.proxy.api_backend_https') : t('formtastic.hints.proxy.api_backend_http')

@@ -20,7 +20,7 @@
       <%= p.text_field_with_errors :pattern, html_options %>
     </td>
 
-    <% if @service.using_proxy_pro? %>
+    <% if @service.using_proxy_pro? || current_account.provider_can_use?(:api_as_product) %>
       <td class="redirect_url">
         <%= p.text_field_with_errors :redirect_url, html_options %>
       </td>

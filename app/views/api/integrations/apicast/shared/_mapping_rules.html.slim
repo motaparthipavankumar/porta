@@ -6,7 +6,7 @@
         tr
           th Verb
           th Pattern
-          - if @service.using_proxy_pro?
+          - if @service.using_proxy_pro? || current_account.provider_can_use?(:api_as_product)
             th Redirect
           th title="increment" +
           th
