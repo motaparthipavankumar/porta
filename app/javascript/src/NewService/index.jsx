@@ -18,7 +18,7 @@ type Props = {
   adminServicesPath: string
 }
 
-const fetchData = async (url) => {
+const fetchData = async (url: string) => {
   const dataItem = url === NAMESPACES_URL
     ? 'projects'
     : 'services'
@@ -42,31 +42,31 @@ const NewServiceWrapper = (props: Props) => {
   const [selectedNamespace, setSelectedNamespace] = useState(undefined)
   const [servicesRequested, setServicesRequested] = useState(false)
 
-  const settingSelectedNamespace = (namespace) => {
+  const settingSelectedNamespace = (namespace: string) => {
     setSelectedNamespace(namespace)
   }
 
-  const onChangeNamespaces = (event) => {
-    setSelectedNamespace(event.target.value)
+  const onChangeNamespaces = (event: SyntheticEvent<HTMLSelectElement>) => {
+    setSelectedNamespace(event.currentTarget.value)
     setServicesRequested(true)
   }
 
-  const startNamespacesFetch = async () => {
+  const startNamespacesFetch = async (): Promise<any> => {
     const namespacesData = await fetchData(NAMESPACES_URL)
     setNamespaces(namespacesData)
     setServicesRequested(true)
     settingSelectedNamespace(namespacesData[0])
   }
 
-  const startServicesFetch = async (servicesUrl) => {
+  const startServicesFetch = async (servicesUrl: string) => {
     setServices([])
     const servicesData = await fetchData(servicesUrl)
     setServices(servicesData)
     setServicesRequested(false)
   }
 
-  const handleFormsVisibility = (event) => {
-    if (event.target.value === 'discover') {
+  const handleFormsVisibility = (event: SyntheticEvent<HTMLInputElement>) => {
+    if (event.currentTarget.value === 'discover') {
       setServDescVisible(true)
       setServNewVisible(false)
     } else {
@@ -82,7 +82,27 @@ const NewServiceWrapper = (props: Props) => {
     }
   }, [servicesRequested, selectedNamespace])
 
-  const formsProps = {
+  const formsProps: {
+    source: {
+      isServiceDiscoveryUsable: boolean,
+      serviceDiscoveryAuthenticateUrl: string,
+      onHandleFormsVisibility: (event: SyntheticEvent<HTMLInputElement>) => void,
+      onStartNamespacesFetch: () => Promise<any>
+    },
+    serviceDiscovery: {
+      isVisible: boolean,
+      providerAdminServiceDiscoveryServicesPath: string,
+      onSettingSelectedNamespace: (namespace: string) => void,
+      namespaces: string[],
+      services: string[],
+      selectedNamespace?: string,
+      handleChangeNamespaces: (event: SyntheticEvent<HTMLSelectElement>) => void
+    },
+    serviceNew: {
+      isVisible: boolean,
+      adminServicesPath: string
+    }
+  } = {
     source: {
       isServiceDiscoveryUsable: props.isServiceDiscoveryUsable,
       serviceDiscoveryAuthenticateUrl: props.serviceDiscoveryAuthenticateUrl,

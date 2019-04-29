@@ -1,6 +1,15 @@
+// @flow
+
 import React from 'react'
 
-const ServiceSourceForm = (props) => {
+type Props = {
+  isServiceDiscoveryUsable: boolean,
+  serviceDiscoveryAuthenticateUrl: string,
+  onHandleFormsVisibility: (event: SyntheticEvent<HTMLInputElement>) => void,
+  onStartNamespacesFetch: () => Promise<any>
+}
+
+const ServiceSourceForm = (props: Props) => {
   const {isServiceDiscoveryUsable, serviceDiscoveryAuthenticateUrl, onHandleFormsVisibility, onStartNamespacesFetch} = props
   return (<form className="formtastic" id="new_service_source">
     <fieldset className="inputs">
